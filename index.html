@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Feb TV HTML5 Only</title>
+    <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <script>
+        var rutaStream = 'http://cloud2live.it2.com:1935/meytel-user-4-live01/_definst_/mp4:{PABELLON}/playlist.m3u8';
+        var pabellones = [
+            {id: 'breogan', label: 'CAFES CANDELAS BREOGAN'},
+            {id: 'oviedo', label: 'Unión Financiera Oviedo'},
+            {id: 'ourense', label: 'OURENSE PROVINCIA TERMAL'},
+            {id: 'prat', label: 'CB PRAT JOVENTUT'},
+            {id: 'coruna', label: 'LEYMA BASQUET CORUÑA'},
+            {id: 'burgos', label: 'SAN PABLO INMOBILIARIA BURGOS'},
+            {id: 'huesca', label: 'PEÑAS HUESCA'},
+            {id: 'caceres', label: 'CACERES PATRIMONIO DE LA HUMANIDAD'},
+            {id: 'rioja', label: 'COCINAS.COM'},
+            {id: 'palma', label: 'PALMA AIR EUROPA'},
+            {id: 'barcelona', label: 'F C BARCELONA LASSA'},
+            {id: 'navarra', label: 'PLANASA NAVARRA'},
+            {id: 'palencia', label: 'QUESOS CERRATO PALENCIA'},
+            {id: 'melilla', label: 'CLUB MELILLA BALONCESTO'},
+            {id: 'castello', label: 'AMICS CASTELLÓ'},
+            {id: 'lleida', label: 'ACTEL FORÇA LLEIDA'},
+            {id: 'test', label: 'Prueba'}
+        ];
+
+        $(document).ready(
+                function () {
+                    var select = $('#pabellon');
+                    $.each(pabellones, function (key, value) {
+                        select.append($('<option>', {value: value.id}).text(value.label));
+                    });
+
+                    select.change(pabellonChange);
+                }
+        );
+
+
+        function verVideo(urlVideo, label) {
+            console.log("cargando video de pabellon ", urlVideo);
+            var placeholder = $('#zonaVideo');
+            //placeholder.empty();
+            var video = $('<video />', {
+                controls: "true",
+                poster: "http://player.feb.es/images/orofebtv.png",
+                height: 540,
+                width: 960
+            }).append($('<source />', {
+                src: urlVideo,
+                type: "video/mp4"
+            }));
+            placeholder.append('<h2>'+label+'</h2>');
+            placeholder.append(video);
+        }
+
+        function getRutaStream(pabellon)
+        {
+            return rutaStream.replace('{PABELLON}', pabellon);
+        }
+
+        function pabellonChange() {
+            if ($(this).val() == "test")
+            {
+                verVideo("https://youtu.be/BjeBl42JP6c", "Prueba");
+            }
+            else if ($(this).val() != "") {
+                verVideo(getRutaStream($(this).val()),
+                        $(this).children('option:selected').text());
+            }
+        }
+
+    </script>
+</head>
+<body>
+<h1>Visor FebTv HTML5</h1>
+<label for="pabellon">Pabellón</label>
+<select id="pabellon">
+    <option value="">Selecciona pabellón</option>
+</select>
+<br /><hr />
+<div id="zonaVideo">
+
+</div>
+</body>
+</html>
